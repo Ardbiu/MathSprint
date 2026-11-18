@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Math Sprint</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Math Sprint">
+<meta name="theme-color" content="#11141c">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--bg:#11141c;--panel:#1a1f2b;--panel2:#252c3b;--text:#f2f4f8;--muted:#8b93a7;--acc:#ffb03b;--good:#4ade80;--keyp:#3a4560}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;-webkit-user-select:none;user-select:none;overscroll-behavior:none}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.screen{display:none;flex-direction:column;height:100%;max-width:520px;margin:0 auto;padding:16px}
+.screen.on{display:flex}
+.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch}
+button{font:inherit;cursor:pointer}
+.nav{display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.link{appearance:none;background:none;border:0;color:var(--muted);font-size:16px;padding:10px 4px}
+.link b{color:var(--text);font-weight:600}
+h2{font-size:24px;margin:6px 0 14px}
+.btn{appearance:none;border:0;border-radius:16px;font-weight:700;font-size:19px;padding:17px;width:100%;color:#1a1306;background:var(--acc)}
+.btn.ghost{background:var(--panel2);color:var(--text)}
+.btn:active{filter:brightness(.88)}
+.card{background:var(--panel);border-radius:16px;padding:16px;margin-bottom:12px}
+.lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin:0 0 10px}
+.muted{color:var(--muted);font-size:13px}
+/* home */
+.homeMid{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px}
+.startBig{width:min(72vw,280px);height:min(72vw,280px);border-radius:50%;border:0;background:var(--acc);color:#1a1306;
+  font-size:40px;font-weight:800;box-shadow:0 10px 40px rgba(255,176,59,.25)}
+.startBig small{display:block;font-size:15px;font-weight:600;opacity:.7;margin-top:4px}
+.startBig:active{transform:scale(.97);filter:brightness(.92)}
+/* game */
+.top{display:flex;justify-content:space-between;align-items:center;font-variant-numeric:tabular-nums;font-size:20px;font-weight:700}
+.top .s{color:var(--acc);min-width:60px;text-align:right}
+.bar{height:4px;background:var(--panel2);border-radius:4px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc);transform-origin:left}
+.problem{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:140px}
+.q{font-size:clamp(42px,12vw,62px);font-weight:700;font-variant-numeric:tabular-nums}
+.a{margin-top:12px;min-width:170px;height:66px;border-bottom:3px solid var(--panel2);font-size:50px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:var(--acc);transition:border-color .1s}
+.a.ok{border-color:var(--good)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pad button{appearance:none;border:0;border-radius:16px;background:var(--panel2);color:var(--text);font-size:30px;font-weight:600;height:clamp(58px,9.5vh,78px)}
+.pad button.p{background:var(--keyp)}
+.pad button.fn{font-size:20px;color:var(--muted)}
+/* results */
+.resMid{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.big{font-size:110px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.pb{color:var(--good);font-weight:700;min-height:24px;margin-top:8px}
+/* progress */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.stats b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
+.stats span{font-size:12px;color:var(--muted)}
+.chart{display:flex;align-items:flex-end;gap:3px;height:110px}
+.chart div{flex:1;background:var(--acc);border-radius:3px 3px 0 0;min-height:2px;position:relative;opacity:.85}
+.chart div.empty{background:var(--panel2);opacity:1}
+.chart div.today{background:var(--good)}
+.axis{display:flex;justify-content:space-between;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:15px}
+td{padding:7px 2px;border-bottom:1px solid var(--panel2)}
+td.r{text-align:right;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+/* settings */
+.chk{display:flex;align-items:center;gap:10px;margin:12px 0 6px;font-weight:600}
+.chk input{width:20px;height:20px;accent-color:var(--acc)}
+.rng{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:14px;margin-left:30px;flex-wrap:wrap}
+.rng input{width:54px;padding:7px;border-radius:8px;border:1px solid #333b4d;background:var(--bg);color:var(--text);font:inherit;text-align:center;-webkit-user-select:text;user-select:text}
+select{padding:8px;border-radius:8px;background:var(--bg);color:var(--text);border:1px solid #333b4d;font:inherit}
+</style>
+</head>
+<body>
+
+<!-- HOME: opens straight to Start -->
+<section id="home" class="screen on">
+  <div class="nav">
+    <button class="link" data-go="progress">Progress</button>
+    <button class="link" data-go="settings">Settings</button>
+  </div>
+  <div class="homeMid">
+    <button class="startBig" id="startBtn">Start<small id="startSub">2 min</small></button>
+  </div>
+</section>
+
+<!-- GAME -->
+<section id="game" class="screen">
+  <div class="top">
+    <button class="link" id="quitBtn" style="font-size:15px">✕</button>
+    <div id="gTime">2:00</div>
+    <div class="s" id="gScore">0</div>
+  </div>
+  <div class="bar"><i id="gBar"></i></div>
+  <div class="problem"><div class="q" id="gQ"></div><div class="a" id="gA"></div></div>
+  <div class="pad" id="pad">
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="C" class="fn">clear</button><button data-k="0">0</button><button data-k="B" class="fn">⌫</button>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" class="screen">
+  <div class="resMid">
+    <div class="muted" id="rLabel">Score</div>
+    <div class="big" id="rScore">0</div>
+    <div class="pb" id="rPB"></div>
+  </div>
+  <button class="btn" id="againBtn">Try again</button>
+  <div style="display:flex;gap:10px;margin-top:10px">
+    <button class="btn ghost" data-go="home">Home</button>
+    <button class="btn ghost" data-go="progress">Progress</button>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section id="progress" class="screen scroll">
+  <div class="nav"><button class="link" data-go="home">‹ <b>Back</b></button><span></span></div>
+  <h2>Progress</h2>
+  <div class="card">
+    <p class="lbl">Today</p>
+    <div class="stats">
+      <div><b id="pTodayBest">–</b><span>best</span></div>
+      <div><b id="pTodayAvg">–</b><span>average</span></div>
+      <div><b id="pTodayRuns">0</b><span>runs</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="lbl">Daily best · last 30 days</p>
+    <div class="chart" id="pChart"></div>
+    <div class="axis muted"><span id="pAxisL"></span><span>today</span></div>
+  </div>
+  <div class="card">
+    <div class="stats">
+      <div><b id="pAllBest">–</b><span>all-time best</span></div>
+      <div><b id="pStreak">0</b><span>day streak</span></div>
+      <div><b id="pTotal">0</b><span>total runs</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="lbl">Speed by type · last 10 runs</p>
+    <table id="pOps"></table>
+    <p class="muted" style="margin:8px 0 0">The slowest type is the one to drill.</p>
+  </div>
+  <div class="card">
+    <p class="lbl">Recent days</p>
+    <table id="pDays"></table>
+  </div>
+  <p class="muted">Only runs on default settings are counted, so scores stay comparable.</p>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="screen scroll">
+  <div class="nav"><button class="link" data-go="home">‹ <b>Back</b></button><span></span></div>
+  <h2>Settings</h2>
+  <div class="card">
+    <label class="chk"><input type="checkbox" id="opAdd"> Addition</label>
+    <div class="rng">Range: (<input id="a1" inputmode="numeric"> to <input id="a2" inputmode="numeric">) + (<input id="a3" inputmode="numeric"> to <input id="a4" inputmode="numeric">)</div>
+    <label class="chk"><input type="checkbox" id="opSub"> Subtraction</label>
+    <div class="rng">Addition problems in reverse.</div>
+    <label class="chk"><input type="checkbox" id="opMul"> Multiplication</label>
+    <div class="rng">Range: (<input id="m1" inputmode="numeric"> to <input id="m2" inputmode="numeric">) × (<input id="m3" inputmode="numeric"> to <input id="m4" inputmode="numeric">)</div>
+    <label class="chk"><input type="checkbox" id="opDiv"> Division</label>
+    <div class="rng">Multiplication problems in reverse.</div>
+    <div style="display:flex;align-items:center;gap:10px;margin:18px 0 4px">
+      <span style="font-weight:600">Duration</span>
+      <select id="dur"><option value="30">30 seconds</option><option value="60">60 seconds</option><option value="120">120 seconds</option><option value="300">300 seconds</option><option value="600">600 seconds</option></select>
+    </div>
+  </div>
+  <button class="btn ghost" id="resetBtn">Reset to defaults</button>
+  <p class="muted" id="defNote" style="margin-top:12px"></p>
+</section>
+
+<script>
+(() => {
+const DEF={add:true,sub:true,mul:true,div:true,a:[2,100,2,100],m:[2,12,2,100],dur:120};
+const $=id=>document.getElementById(id);
+const load=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d;}catch{return d;}};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{}};
+let S=Object.assign(JSON.parse(JSON.stringify(DEF)),load('ms_settings',{}));
+let H=load('ms_history',[]); // {t,score,def,ops:{op:[ms,n]}}
+const isDef=s=>s.add&&s.sub&&s.mul&&s.div&&s.dur===120&&s.a.join()===DEF.a.join()&&s.m.join()===DEF.m.join();
+const dayKey=t=>{const d=new Date(t);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();};
+const defRuns=()=>H.filter(h=>h.def);
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
+  if(id==='progress') paintProgress();
+  if(id==='home') paintHome();
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+
+// ----- settings -----
+const F={a:['a1','a2','a3','a4'],m:['m1','m2','m3','m4']};
+function paintSettings(){
+  $('opAdd').checked=S.add;$('opSub').checked=S.sub;$('opMul').checked=S.mul;$('opDiv').checked=S.div;
+  F.a.forEach((id,i)=>$(id).value=S.a[i]);F.m.forEach((id,i)=>$(id).value=S.m[i]);$('dur').value=String(S.dur);
+  $('defNote').textContent=isDef(S)?'Using default settings: runs count toward Progress.':'Custom settings: runs won\'t count toward Progress.';
+}
+function readSettings(){
+  const n=(id,f)=>{const v=parseInt($(id).value,10);return Number.isFinite(v)&&v>=0?v:f;};
+  S.add=$('opAdd').checked;S.sub=$('opSub').checked;S.mul=$('opMul').checked;S.div=$('opDiv').checked;
+  S.a=F.a.map((id,i)=>n(id,DEF.a[i]));S.m=F.m.map((id,i)=>n(id,DEF.m[i]));
+  for(const r of [S.a,S.m])for(const i of [0,2])if(r[i]>r[i+1])[r[i],r[i+1]]=[r[i+1],r[i]];
+  if(S.m[1]===0)S.m[1]=1;
+  S.dur=parseInt($('dur').value,10)||120;
+  if(!(S.add||S.sub||S.mul||S.div))S.add=true;
+  save('ms_settings',S);paintSettings();
+}
+document.querySelectorAll('#settings input,#dur').forEach(el=>el.addEventListener('change',readSettings));
+$('resetBtn').onclick=()=>{S=JSON.parse(JSON.stringify(DEF));save('ms_settings',S);paintSettings();};
+
+function paintHome(){ $('startSub').textContent=S.dur>=60?`${S.dur/60} min`:`${S.dur} sec`; }
+
+// ----- game -----
+const ri=(lo,hi)=>lo+Math.floor(Math.random()*(hi-lo+1));
+let G=null,timer=0;
+function makeProblem(prev){
+  const ops=['add','sub','mul','div'].filter(o=>S[o]);
+  for(let t=0;t<20;t++){
+    const op=ops[Math.floor(Math.random()*ops.length)];let q,ans;
+    if(op==='add'||op==='sub'){const x=ri(S.a[0],S.a[1]),y=ri(S.a[2],S.a[3]);
+      if(op==='add'){q=`${x} + ${y}`;ans=x+y;}else{q=`${x+y} – ${x}`;ans=y;}}
+    else{let x=ri(S.m[0],S.m[1]);const y=ri(S.m[2],S.m[3]);
+      if(op==='mul'){q=`${x} × ${y}`;ans=x*y;}else{if(x===0)x=1;q=`${x*y} ÷ ${x}`;ans=y;}}
+    if(!prev||q!==prev.q)return{op,q,ans:String(ans)};
+  }
+}
+function start(){
+  G={score:0,typed:'',dur:S.dur*1000,t0:performance.now(),ops:{},def:isDef(S)};
+  $('gScore').textContent='0';next();show('game');
+  clearInterval(timer);timer=setInterval(tick,50);tick();
+}
+function next(){G.p=makeProblem(G.p);G.pt=performance.now();G.typed='';$('gQ').textContent=G.p.q;$('gA').textContent='';}
+function press(k){
+  if(!G||G.done)return;
+  if(k==='C')G.typed='';else if(k==='B')G.typed=G.typed.slice(0,-1);else if(G.typed.length<7)G.typed+=k;
+  $('gA').textContent=G.typed;
+  if(G.typed===G.p.ans){
+    const o=(G.ops[G.p.op]??=[0,0]);o[0]+=performance.now()-G.pt;o[1]++;
+    G.score++;$('gScore').textContent=G.score;
+    const a=$('gA');a.classList.add('ok');setTimeout(()=>a.classList.remove('ok'),110);
+    next();
+  }
+}
+function tick(){
+  if(!G)return;
+  const left=Math.max(0,G.dur-(performance.now()-G.t0)),s=Math.ceil(left/1000);
+  $('gTime').textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  $('gBar').style.transform=`scaleX(${left/G.dur})`;
+  if(left<=0)finish();
+}
+function quit(){clearInterval(timer);G=null;show('home');}
+function finish(){
+  clearInterval(timer);G.done=true;
+  const prior=defRuns(),prevBest=Math.max(0,...prior.map(r=>r.score));
+  H.push({t:Date.now(),score:G.score,def:G.def,ops:G.ops});if(H.length>3000)H=H.slice(-3000);save('ms_history',H);
+  $('rScore').textContent=G.score;
+  $('rLabel').textContent=G.def?'Score':'Score (custom settings)';
+  $('rPB').textContent=!G.def?'':!prior.length?'First run: baseline set':G.score>prevBest?`New best! Previous: ${prevBest}`:`Best: ${prevBest}`;
+  G=null;show('results');
+}
+
+// ----- progress -----
+function paintProgress(){
+  const runs=defRuns(),byDay={};
+  for(const r of runs)(byDay[dayKey(r.t)]??=[]).push(r.score);
+  const today=byDay[dayKey(Date.now())]||[];
+  $('pTodayBest').textContent=today.length?Math.max(...today):'–';
+  $('pTodayAvg').textContent=today.length?Math.round(today.reduce((a,b)=>a+b,0)/today.length):'–';
+  $('pTodayRuns').textContent=today.length;
+  const days=[];for(let i=29;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);days.push(d);}
+  const bests=days.map(d=>{const s=byDay[dayKey(d)];return s?Math.max(...s):0;});
+  const mx=Math.max(1,...bests);
+  $('pChart').innerHTML=bests.map((b,i)=>`<div class="${b?'':'empty'} ${i===29&&b?'today':''}" style="height:${b?Math.max(4,b/mx*100):2}%" title="${b||''}"></div>`).join('');
+  $('pAxisL').textContent=days[0].toLocaleDateString(undefined,{month:'short',day:'numeric'});
+  $('pAllBest').textContent=runs.length?Math.max(...runs.map(r=>r.score)):'–';
+  $('pTotal').textContent=runs.length;
+  let streak=0;const d=new Date();if(!byDay[dayKey(d)])d.setDate(d.getDate()-1);
+  while(byDay[dayKey(d)]){streak++;d.setDate(d.getDate()-1);}
+  $('pStreak').textContent=streak;
+  const agg={};for(const r of runs.slice(-10))for(const[o,[ms,n]]of Object.entries(r.ops||{})){(agg[o]??=[0,0]);agg[o][0]+=ms;agg[o][1]+=n;}
+  const names={add:'Addition',sub:'Subtraction',mul:'Multiplication',div:'Division'};
+  const rows=Object.entries(agg).map(([o,[ms,n]])=>({o,avg:ms/n})).sort((a,b)=>b.avg-a.avg);
+  $('pOps').innerHTML=rows.length?rows.map((r,i)=>`<tr><td>${names[r.o]}${i===0&&rows.length>1?' <span style="color:var(--acc)">← slowest</span>':''}</td><td class="r">${(r.avg/1000).toFixed(2)} s</td></tr>`).join(''):'<tr><td class="muted">No runs yet.</td></tr>';
+  const keys=Object.keys(byDay).sort((a,b)=>new Date(b.replace(/-/g,'/'))-new Date(a.replace(/-/g,'/'))).slice(0,14);
+  $('pDays').innerHTML=keys.length?keys.map(k=>{const s=byDay[k];const dt=new Date(k.replace(/-/g,'/'));
+    return `<tr><td>${dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</td><td class="r">best ${Math.max(...s)} · avg ${Math.round(s.reduce((a,b)=>a+b,0)/s.length)} · ${s.length} run${s.length>1?'s':''}</td></tr>`;}).join(''):'<tr><td class="muted">No runs yet.</td></tr>';
+}
+
+// ----- input -----
+const pad=$('pad');
+pad.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();b.classList.add('p');press(b.dataset.k);});
+const clr=()=>pad.querySelectorAll('.p').forEach(b=>b.classList.remove('p'));
+['pointerup','pointercancel','pointerleave'].forEach(t=>pad.addEventListener(t,clr));
+$('startBtn').addEventListener('click',start);$('againBtn').addEventListener('click',start);$('quitBtn').addEventListener('click',quit);
+document.addEventListener('keydown',e=>{
+  const on=id=>$(id).classList.contains('on');
+  if(on('game')){if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')press('B');else if(e.key==='Escape')quit();e.preventDefault();}
+  else if(e.key==='Enter'&&(on('home')||on('results'))){e.preventDefault();start();}
+});
+document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
+document.addEventListener('gesturestart',e=>e.preventDefault());
+document.addEventListener('visibilitychange',()=>{if(G)tick();});
+
+paintSettings();paintHome();
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
