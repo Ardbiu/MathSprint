@@ -218,8 +218,17 @@ function show(id){
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
 
 // ----- sound (synthesized, no files, works offline) -----
-let AC=null;
+let AC=null,SILENT=null;
+// iPhone mutes web audio when the ring/silent switch is on. Asking for the "playback"
+// audio session (and, on older iOS, playing a silent <audio> element) makes it audible anyway.
+function silentWav(){
+  const n=2205,b=new ArrayBuffer(44+n*2),v=new DataView(b),w=(o,t)=>[...t].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,22050,true);v.setUint32(28,44100,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+  return URL.createObjectURL(new Blob([b],{type:'audio/wav'}));
+}
 function audio(){
+  try{ if(navigator.audioSession&&navigator.audioSession.type!=='playback')navigator.audioSession.type='playback'; }catch{}
   if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}
   if(AC.state==='suspended')AC.resume();
   return AC;
@@ -236,14 +245,14 @@ const SCALE=[523.25,587.33,659.25,783.99,880,1046.5,1174.66,1318.5]; // C major 
 function sCorrect(n){
   if(!SOUND||!audio())return;
   const t=AC.currentTime,f=SCALE[n%SCALE.length];
-  tone(f,t,0.12,0.18);tone(f*2,t,0.07,0.05);
+  tone(f,t,0.14,0.35,'triangle');tone(f*2,t,0.08,0.10);
 }
 function sFinish(best){
   if(!SOUND||!audio())return;
   const t=AC.currentTime+0.02,notes=best?[523.25,659.25,783.99,1046.5,1318.5]:[523.25,659.25,783.99,1046.5];
-  notes.forEach((f,i)=>{tone(f,t+i*0.09,0.55,0.16,'triangle');tone(f*2,t+i*0.09,0.25,0.04);});
+  notes.forEach((f,i)=>{tone(f,t+i*0.09,0.6,0.32,'triangle');tone(f*2,t+i*0.09,0.3,0.08);});
 }
-function unlock(){ if(!SOUND||!audio())return; const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0); }
+function unlock(){ if(!SOUND||!audio())return; try{ if(!SILENT){SILENT=new Audio(silentWav());SILENT.setAttribute('playsinline','');SILENT.loop=true;SILENT.volume=0.01;} SILENT.play().catch(()=>{}); }catch{} const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0); }
 
 // ----- settings on the start page -----
 const F={a:['a1','a2','a3','a4'],m:['m1','m2','m3','m4']};
@@ -312,6 +321,8 @@ function tick(){
   if(left<=0)finish();
 }
 function quit(){clearInterval(timer);G=null;show('home');}
+function release(){ try{ SILENT&&SILENT.pause(); }catch{} }
+document.addEventListener('visibilitychange',()=>{ if(document.hidden)release(); });
 function finish(){
   clearInterval(timer);G.done=true;
   const prior=defRuns(),prevBest=Math.max(0,...prior.map(r=>r.score));
