@@ -25,19 +25,29 @@ button{font:inherit;cursor:pointer}
 .nav{display:flex;justify-content:space-between;align-items:center;min-height:44px}
 .link{appearance:none;background:none;border:0;color:var(--muted);font-size:16px;padding:10px 4px}
 .link b{color:var(--text);font-weight:600}
+h1{font-size:26px;margin:2px 0 4px;letter-spacing:-.3px}
 h2{font-size:24px;margin:6px 0 14px}
 .btn{appearance:none;border:0;border-radius:16px;font-weight:700;font-size:19px;padding:17px;width:100%;color:#1a1306;background:var(--acc)}
 .btn.ghost{background:var(--panel2);color:var(--text)}
 .btn:active{filter:brightness(.88)}
-.card{background:var(--panel);border-radius:16px;padding:16px;margin-bottom:12px}
+.card{background:var(--panel);border-radius:16px;padding:14px 16px;margin-bottom:12px}
 .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin:0 0 10px}
 .muted{color:var(--muted);font-size:13px}
-/* home */
-.homeMid{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px}
-.startBig{width:min(72vw,280px);height:min(72vw,280px);border-radius:50%;border:0;background:var(--acc);color:#1a1306;
-  font-size:40px;font-weight:800;box-shadow:0 10px 40px rgba(255,176,59,.25)}
-.startBig small{display:block;font-size:15px;font-weight:600;opacity:.7;margin-top:4px}
-.startBig:active{transform:scale(.97);filter:brightness(.92)}
+/* home = Zetamac settings + Start */
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px;line-height:1.35}
+.op{padding:12px 0;border-bottom:1px solid var(--panel2)}
+.op:last-child{border-bottom:0}
+.chk{display:flex;align-items:center;gap:12px;font-weight:600;font-size:17px}
+.chk input{width:22px;height:22px;accent-color:var(--acc);margin:0}
+.rng{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:15px;margin:10px 0 0 34px;flex-wrap:nowrap;white-space:nowrap}
+@media (max-width:420px){.rng{margin-left:0;gap:4px;font-size:14px}}
+.rng input{width:50px;flex:0 0 auto;padding:8px 2px;border-radius:9px;border:1px solid #333b4d;background:var(--bg);color:var(--text);font:inherit;font-size:16px;text-align:center;-webkit-user-select:text;user-select:text}
+.rng.off{opacity:.35}
+.durRow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+select{padding:9px;border-radius:9px;background:var(--bg);color:var(--text);border:1px solid #333b4d;font:inherit;font-size:16px}
+.tog{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--panel2)}
+.homeFoot{margin-top:auto;padding-top:6px}
+.homeFoot .row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
 /* game */
 .top{display:flex;justify-content:space-between;align-items:center;font-variant-numeric:tabular-nums;font-size:20px;font-weight:700}
 .top .s{color:var(--acc);min-width:60px;text-align:right}
@@ -54,13 +64,15 @@ h2{font-size:24px;margin:6px 0 14px}
 /* results */
 .resMid{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
 .big{font-size:110px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.big.pop{animation:pop .45s ease-out}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
 .pb{color:var(--good);font-weight:700;min-height:24px;margin-top:8px}
 /* progress */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
 .stats b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
 .stats span{font-size:12px;color:var(--muted)}
 .chart{display:flex;align-items:flex-end;gap:3px;height:110px}
-.chart div{flex:1;background:var(--acc);border-radius:3px 3px 0 0;min-height:2px;position:relative;opacity:.85}
+.chart div{flex:1;background:var(--acc);border-radius:3px 3px 0 0;min-height:2px;opacity:.85}
 .chart div.empty{background:var(--panel2);opacity:1}
 .chart div.today{background:var(--good)}
 .axis{display:flex;justify-content:space-between;margin-top:6px}
@@ -68,24 +80,54 @@ table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font
 td{padding:7px 2px;border-bottom:1px solid var(--panel2)}
 td.r{text-align:right;color:var(--muted)}
 tr:last-child td{border-bottom:0}
-/* settings */
-.chk{display:flex;align-items:center;gap:10px;margin:12px 0 6px;font-weight:600}
-.chk input{width:20px;height:20px;accent-color:var(--acc)}
-.rng{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:14px;margin-left:30px;flex-wrap:wrap}
-.rng input{width:54px;padding:7px;border-radius:8px;border:1px solid #333b4d;background:var(--bg);color:var(--text);font:inherit;text-align:center;-webkit-user-select:text;user-select:text}
-select{padding:8px;border-radius:8px;background:var(--bg);color:var(--text);border:1px solid #333b4d;font:inherit}
 </style>
 </head>
 <body>
 
-<!-- HOME: opens straight to Start -->
-<section id="home" class="screen on">
+<!-- HOME: Zetamac-style settings, then Start -->
+<section id="home" class="screen on scroll">
   <div class="nav">
-    <button class="link" data-go="progress">Progress</button>
-    <button class="link" data-go="settings">Settings</button>
+    <h1>Math Sprint</h1>
+    <button class="link" data-go="progress">Progress ›</button>
   </div>
-  <div class="homeMid">
-    <button class="startBig" id="startBtn">Start<small id="startSub">2 min</small></button>
+  <p class="sub">Two minutes to solve as many problems as you can. It moves on the instant you're right.</p>
+
+  <div class="card">
+    <div class="op">
+      <label class="chk"><input type="checkbox" id="opAdd"> Addition</label>
+      <div class="rng" id="rngA">(<input id="a1" inputmode="numeric"> to <input id="a2" inputmode="numeric">) + (<input id="a3" inputmode="numeric"> to <input id="a4" inputmode="numeric">)</div>
+    </div>
+    <div class="op">
+      <label class="chk"><input type="checkbox" id="opSub"> Subtraction</label>
+      <div class="rng" id="rngS">Addition problems in reverse.</div>
+    </div>
+    <div class="op">
+      <label class="chk"><input type="checkbox" id="opMul"> Multiplication</label>
+      <div class="rng" id="rngM">(<input id="m1" inputmode="numeric"> to <input id="m2" inputmode="numeric">) × (<input id="m3" inputmode="numeric"> to <input id="m4" inputmode="numeric">)</div>
+    </div>
+    <div class="op">
+      <label class="chk"><input type="checkbox" id="opDiv"> Division</label>
+      <div class="rng" id="rngD">Multiplication problems in reverse.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="durRow">
+      <span style="font-weight:600">Duration</span>
+      <select id="dur"><option value="30">30 seconds</option><option value="60">60 seconds</option><option value="120">120 seconds</option><option value="300">300 seconds</option><option value="600">600 seconds</option></select>
+    </div>
+    <div class="tog">
+      <span style="font-weight:600">Sound</span>
+      <label class="chk" style="font-size:15px;color:var(--muted)"><input type="checkbox" id="snd"> on</label>
+    </div>
+  </div>
+
+  <div class="homeFoot">
+    <button class="btn" id="startBtn">Start</button>
+    <div class="row">
+      <span class="muted" id="defNote"></span>
+      <button class="link" id="resetBtn" style="font-size:14px;padding:6px 0">Reset defaults</button>
+    </div>
   </div>
 </section>
 
@@ -115,7 +157,7 @@ select{padding:8px;border-radius:8px;background:var(--bg);color:var(--text);bord
   </div>
   <button class="btn" id="againBtn">Try again</button>
   <div style="display:flex;gap:10px;margin-top:10px">
-    <button class="btn ghost" data-go="home">Home</button>
+    <button class="btn ghost" data-go="home">Change settings</button>
     <button class="btn ghost" data-go="progress">Progress</button>
   </div>
 </section>
@@ -156,28 +198,6 @@ select{padding:8px;border-radius:8px;background:var(--bg);color:var(--text);bord
   <p class="muted">Only runs on default settings are counted, so scores stay comparable.</p>
 </section>
 
-<!-- SETTINGS -->
-<section id="settings" class="screen scroll">
-  <div class="nav"><button class="link" data-go="home">‹ <b>Back</b></button><span></span></div>
-  <h2>Settings</h2>
-  <div class="card">
-    <label class="chk"><input type="checkbox" id="opAdd"> Addition</label>
-    <div class="rng">Range: (<input id="a1" inputmode="numeric"> to <input id="a2" inputmode="numeric">) + (<input id="a3" inputmode="numeric"> to <input id="a4" inputmode="numeric">)</div>
-    <label class="chk"><input type="checkbox" id="opSub"> Subtraction</label>
-    <div class="rng">Addition problems in reverse.</div>
-    <label class="chk"><input type="checkbox" id="opMul"> Multiplication</label>
-    <div class="rng">Range: (<input id="m1" inputmode="numeric"> to <input id="m2" inputmode="numeric">) × (<input id="m3" inputmode="numeric"> to <input id="m4" inputmode="numeric">)</div>
-    <label class="chk"><input type="checkbox" id="opDiv"> Division</label>
-    <div class="rng">Multiplication problems in reverse.</div>
-    <div style="display:flex;align-items:center;gap:10px;margin:18px 0 4px">
-      <span style="font-weight:600">Duration</span>
-      <select id="dur"><option value="30">30 seconds</option><option value="60">60 seconds</option><option value="120">120 seconds</option><option value="300">300 seconds</option><option value="600">600 seconds</option></select>
-    </div>
-  </div>
-  <button class="btn ghost" id="resetBtn">Reset to defaults</button>
-  <p class="muted" id="defNote" style="margin-top:12px"></p>
-</section>
-
 <script>
 (() => {
 const DEF={add:true,sub:true,mul:true,div:true,a:[2,100,2,100],m:[2,12,2,100],dur:120};
@@ -185,24 +205,55 @@ const $=id=>document.getElementById(id);
 const load=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d;}catch{return d;}};
 const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{}};
 let S=Object.assign(JSON.parse(JSON.stringify(DEF)),load('ms_settings',{}));
-let H=load('ms_history',[]); // {t,score,def,ops:{op:[ms,n]}}
+let H=load('ms_history',[]);
+let SOUND=load('ms_sound',true);
 const isDef=s=>s.add&&s.sub&&s.mul&&s.div&&s.dur===120&&s.a.join()===DEF.a.join()&&s.m.join()===DEF.m.join();
 const dayKey=t=>{const d=new Date(t);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();};
 const defRuns=()=>H.filter(h=>h.def);
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
-  if(id==='progress') paintProgress();
-  if(id==='home') paintHome();
+  if(id==='progress')paintProgress();
 }
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
 
-// ----- settings -----
+// ----- sound (synthesized, no files, works offline) -----
+let AC=null;
+function audio(){
+  if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}
+  if(AC.state==='suspended')AC.resume();
+  return AC;
+}
+function tone(freq,start,len,vol,type='sine'){
+  const ac=AC,o=ac.createOscillator(),g=ac.createGain();
+  o.type=type;o.frequency.setValueAtTime(freq,start);
+  g.gain.setValueAtTime(0.0001,start);
+  g.gain.exponentialRampToValueAtTime(vol,start+0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001,start+len);
+  o.connect(g).connect(ac.destination);o.start(start);o.stop(start+len+0.02);
+}
+const SCALE=[523.25,587.33,659.25,783.99,880,1046.5,1174.66,1318.5]; // C major pentatonic-ish climb
+function sCorrect(n){
+  if(!SOUND||!audio())return;
+  const t=AC.currentTime,f=SCALE[n%SCALE.length];
+  tone(f,t,0.12,0.18);tone(f*2,t,0.07,0.05);
+}
+function sFinish(best){
+  if(!SOUND||!audio())return;
+  const t=AC.currentTime+0.02,notes=best?[523.25,659.25,783.99,1046.5,1318.5]:[523.25,659.25,783.99,1046.5];
+  notes.forEach((f,i)=>{tone(f,t+i*0.09,0.55,0.16,'triangle');tone(f*2,t+i*0.09,0.25,0.04);});
+}
+function unlock(){ if(!SOUND||!audio())return; const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0); }
+
+// ----- settings on the start page -----
 const F={a:['a1','a2','a3','a4'],m:['m1','m2','m3','m4']};
 function paintSettings(){
   $('opAdd').checked=S.add;$('opSub').checked=S.sub;$('opMul').checked=S.mul;$('opDiv').checked=S.div;
   F.a.forEach((id,i)=>$(id).value=S.a[i]);F.m.forEach((id,i)=>$(id).value=S.m[i]);$('dur').value=String(S.dur);
-  $('defNote').textContent=isDef(S)?'Using default settings: runs count toward Progress.':'Custom settings: runs won\'t count toward Progress.';
+  $('rngA').classList.toggle('off',!S.add&&!S.sub);$('rngS').classList.toggle('off',!S.sub);
+  $('rngM').classList.toggle('off',!S.mul&&!S.div);$('rngD').classList.toggle('off',!S.div);
+  $('snd').checked=SOUND;
+  $('defNote').textContent=isDef(S)?'Default · counts in Progress':'Custom · not counted';
 }
 function readSettings(){
   const n=(id,f)=>{const v=parseInt($(id).value,10);return Number.isFinite(v)&&v>=0?v:f;};
@@ -211,13 +262,11 @@ function readSettings(){
   for(const r of [S.a,S.m])for(const i of [0,2])if(r[i]>r[i+1])[r[i],r[i+1]]=[r[i+1],r[i]];
   if(S.m[1]===0)S.m[1]=1;
   S.dur=parseInt($('dur').value,10)||120;
-  if(!(S.add||S.sub||S.mul||S.div))S.add=true;
   save('ms_settings',S);paintSettings();
 }
-document.querySelectorAll('#settings input,#dur').forEach(el=>el.addEventListener('change',readSettings));
+document.querySelectorAll('#home input:not(#snd),#dur').forEach(el=>el.addEventListener('change',readSettings));
+$('snd').addEventListener('change',()=>{SOUND=$('snd').checked;save('ms_sound',SOUND);if(SOUND){unlock();sCorrect(0);}});
 $('resetBtn').onclick=()=>{S=JSON.parse(JSON.stringify(DEF));save('ms_settings',S);paintSettings();};
-
-function paintHome(){ $('startSub').textContent=S.dur>=60?`${S.dur/60} min`:`${S.dur} sec`; }
 
 // ----- game -----
 const ri=(lo,hi)=>lo+Math.floor(Math.random()*(hi-lo+1));
@@ -234,6 +283,10 @@ function makeProblem(prev){
   }
 }
 function start(){
+  if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+  readSettings();
+  if(!(S.add||S.sub||S.mul||S.div)){$('defNote').textContent='Pick at least one operation.';return;}
+  unlock();
   G={score:0,typed:'',dur:S.dur*1000,t0:performance.now(),ops:{},def:isDef(S)};
   $('gScore').textContent='0';next();show('game');
   clearInterval(timer);timer=setInterval(tick,50);tick();
@@ -245,6 +298,7 @@ function press(k){
   $('gA').textContent=G.typed;
   if(G.typed===G.p.ans){
     const o=(G.ops[G.p.op]??=[0,0]);o[0]+=performance.now()-G.pt;o[1]++;
+    sCorrect(G.score);
     G.score++;$('gScore').textContent=G.score;
     const a=$('gA');a.classList.add('ok');setTimeout(()=>a.classList.remove('ok'),110);
     next();
@@ -261,11 +315,14 @@ function quit(){clearInterval(timer);G=null;show('home');}
 function finish(){
   clearInterval(timer);G.done=true;
   const prior=defRuns(),prevBest=Math.max(0,...prior.map(r=>r.score));
+  const newBest=G.def&&prior.length&&G.score>prevBest;
   H.push({t:Date.now(),score:G.score,def:G.def,ops:G.ops});if(H.length>3000)H=H.slice(-3000);save('ms_history',H);
   $('rScore').textContent=G.score;
   $('rLabel').textContent=G.def?'Score':'Score (custom settings)';
-  $('rPB').textContent=!G.def?'':!prior.length?'First run: baseline set':G.score>prevBest?`New best! Previous: ${prevBest}`:`Best: ${prevBest}`;
+  $('rPB').textContent=!G.def?'':!prior.length?'First run: baseline set':newBest?`New best! Previous: ${prevBest}`:`Best: ${prevBest}`;
   G=null;show('results');
+  const big=$('rScore');big.classList.remove('pop');void big.offsetWidth;big.classList.add('pop');
+  sFinish(newBest);
 }
 
 // ----- progress -----
@@ -279,7 +336,7 @@ function paintProgress(){
   const days=[];for(let i=29;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);days.push(d);}
   const bests=days.map(d=>{const s=byDay[dayKey(d)];return s?Math.max(...s):0;});
   const mx=Math.max(1,...bests);
-  $('pChart').innerHTML=bests.map((b,i)=>`<div class="${b?'':'empty'} ${i===29&&b?'today':''}" style="height:${b?Math.max(4,b/mx*100):2}%" title="${b||''}"></div>`).join('');
+  $('pChart').innerHTML=bests.map((b,i)=>`<div class="${b?'':'empty'} ${i===29&&b?'today':''}" style="height:${b?Math.max(4,b/mx*100):2}%"></div>`).join('');
   $('pAxisL').textContent=days[0].toLocaleDateString(undefined,{month:'short',day:'numeric'});
   $('pAllBest').textContent=runs.length?Math.max(...runs.map(r=>r.score)):'–';
   $('pTotal').textContent=runs.length;
@@ -310,7 +367,7 @@ document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
 document.addEventListener('gesturestart',e=>e.preventDefault());
 document.addEventListener('visibilitychange',()=>{if(G)tick();});
 
-paintSettings();paintHome();
+paintSettings();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();
 </script>
